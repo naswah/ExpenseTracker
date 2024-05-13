@@ -50,13 +50,9 @@ public class DatabaseManager {
                 System.out.print("Add another expense? (yes/no): ");
                 addAnother = scan.nextLine();
                 System.out.println(addAnother);
-
-                // if (!addAnother.equals("yes")) {
-                //     break;  // Exit the loop if user does not want to add another expense
-                // }
             
-        }while (!addAnother.equals("no"));
-            scan.close(); 
+        }while (addAnother.equals("yes"));
+            
     }
 
     // public void deleteExpense(String category, String month) throws Exception {
@@ -67,24 +63,18 @@ public class DatabaseManager {
     //     statement.close();
     // }
 
-    
-    public void printExpensesByMonth(String month) throws Exception {
-       
-            String query = "SELECT * FROM record WHERE month = " + month;
+
+        public void printExpensesByMonth(String month) throws Exception {
+            String query = "SELECT * FROM record WHERE month = '" + month + "';";
             ResultSet resultSet = display(query);
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String category = resultSet.getString("category");
-                double amount = resultSet.getDouble("amount");
-                int expenseMonth = resultSet.getInt("month");
-
-                System.out.println("Expense ID: " + id);
-                System.out.println("Category: " + category);
-                System.out.println("Amount: " + amount);
-                System.out.println("Month: " + expenseMonth);
+                System.out.println("Expense ID: " + resultSet.getInt("id"));
+                System.out.println("Category: " + resultSet.getString("category"));
+                System.out.println("Amount: " +  resultSet.getDouble("amount"));
+                System.out.println("Month: " + resultSet.getString("month"));
                 System.out.println("---------------------");
             }
-        }
+        }    
    
         public double calculateSavings(String month, double totalIncome) throws Exception {
             double totalExpenses = 0.0;
