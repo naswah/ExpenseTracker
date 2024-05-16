@@ -90,18 +90,26 @@ public class DatabaseManager {
             }
         }    
    
-        public double calculateSavings(String month, double totalIncome) throws Exception {
+        public double calculateSavings(int uid, String month) throws Exception {
             double totalExpenses = 0.0;
+            double income = 0.0;
         
-            String sql = "SELECT amount FROM record WHERE MONTH = '" + month + "'";
-            runsql(sql);
-            ResultSet resultSet = display(sql);
+            String sql = "SELECT income FROM users WHERE uid = " + uid;
+            ResultSet incomeResultSet = display(sql);
         
-            while (resultSet.next()) {
-                totalExpenses += resultSet.getDouble("amount");
+            if (incomeResultSet.next()) {
+                income = incomeResultSet.getDouble("income");
             }
-            resultSet.close();
+            incomeResultSet.close();
         
-            return totalIncome - totalExpenses;
+            String sql1 = "SELECT amount FROM record WHERE MONTH = '" + month + "'";
+            ResultSet expensesResultSet = display(sql1);
+        
+            while (expensesResultSet.next()) {
+                totalExpenses += expensesResultSet.getDouble("amount");
+            }
+            expensesResultSet.close();
+
+            return income - totalExpenses;
         }
  } 
