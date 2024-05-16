@@ -4,10 +4,9 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        int c;
+        int c, uid;
         char ch;
         String newuser;
-        int userid;
 
         DatabaseManager edb = new DatabaseManager();
 
@@ -18,20 +17,44 @@ public class Main {
         newuser = scan.nextLine();
 
         if (newuser.equals("yes")){
-            System.out.println("Hello!!! To calculate your savings, we need your income amount. ");
+            System.out.println("To calculate your savings, we need your information. Please fill up the details.");
             System.out.println("Please enter your userid :");
-            int id = scan.nextInt();
-            System.out.println("Please enter your name :");
-            String name=scan.nextLine();
-            System.out.print("Please enter your income :");
-            double totalIncome = scan.nextDouble();
+            uid = scan.nextInt();
             scan.nextLine();
-            String sqlString = "insert into users values("+ id +",'"+ name+"',"+ totalIncome +";)";
-            edb.runsql(sqlString);
+
+            if( edb.usercheck(uid) == true){
+                System.out.println("This userid is already taken!");
+                do{
+                    System.out.println("Please enter a new userid, previous was already taken :");
+                    uid = scan.nextInt();
+                } while(edb.usercheck(uid) == false);
+                System.out.println("Please enter your name :");
+                String uname=scan.nextLine();
+                System.out.print("Please enter your income :");
+                double income = scan.nextDouble();
+                scan.nextLine();
+                String sqlString = "insert into users values("+ uid +",'"+ uname+"',"+ income +");";
+                edb.runsql(sqlString);
+
+            }
+            else{
+                System.out.println("Please enter your name :");
+                String uname=scan.nextLine();
+                System.out.print("Please enter your income :");
+                double income = scan.nextDouble();
+                scan.nextLine();
+                String sqlString = "insert into users values("+ uid +",'"+ uname+"',"+ income +");";
+                edb.runsql(sqlString);
+            }
+            
         }
+
         else {
             System.out.println("Enter your userid :");
-            userid = scan.nextInt();
+            uid = scan.nextInt();
+            String sqlString = "select * from users;";
+            edb.runsql(sqlString);
+
         }
         
         do {
@@ -44,14 +67,13 @@ public class Main {
             System.out.println("4. Calculate savings according to month");
             System.out.println("5. Exit");
             System.out.print("Enter your choice:");
-
             c = scan.nextInt();
             scan.nextLine();
 
             switch (c) {
                 case 1:
                     // add expense:
-                    edb.addExpense();
+                    edb.addExpense(uid);
                     ch = (char) System.in.read();
                     break;
 
@@ -61,17 +83,24 @@ public class Main {
 
                 case 3:
 
+                    if(newuser.equals("yes")){
+                        System.out.println("No expenses to show");
+                        return;
+                    }
+                    else{
+
                     System.out.println("Enter a month: ");
-                    String month = scan.nextLine();
-                    edb.printExpensesByMonth(month);
+                    String month = scan.nextLine(); 
+                    edb.printExpensesByMonth(month, uid);
                     ch = (char) System.in.read();
 
+                    }
                     break;
 
                 case 4:
                     System.out.println("Enter a month: ");
                     String months = scan.nextLine();
-                    edb.calculateSavings(months, totalIncome);  // cant pass totalIncome directly, have to extract from db
+                   // edb.calculateSavings(months, totalIncome);
                     ch = (char) System.in.read();
                     break;
 
