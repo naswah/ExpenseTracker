@@ -24,7 +24,18 @@ public class DatabaseManager {
         return resultSet;
     }
 
-    public void addExpense() throws Exception{
+    public boolean usercheck(int uid) throws Exception {
+        String sql = "select * from record where id=" + uid + ";";
+        ResultSet resultSet = display(sql);
+        while (resultSet.next()) {
+          if (uid == resultSet.getInt("id")) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+    public void addExpense(int uid) throws Exception{
         Scanner scan = new Scanner(System.in);
         //Expense expense= new Expense();
         String addAnother ;
@@ -45,6 +56,9 @@ public class DatabaseManager {
                 String sqlString = "insert into record (category, amount, month) values('"+ expense.category +"',  "+expense.amount+" , '"+ expense.month+"');";
                 runsql(sqlString);
 
+                //String sql= "insert into combine values("+ id +",  "+uid+" );";
+               // runsql(sql);
+
                 System.out.println("Expense added successfully.");
 
                 System.out.print("Add another expense? (yes/no): ");
@@ -64,8 +78,8 @@ public class DatabaseManager {
     // }
 
 
-        public void printExpensesByMonth(String month) throws Exception {
-            String query = "SELECT * FROM record WHERE month = '" + month + "';";
+        public void printExpensesByMonth(String month, int userid) throws Exception {
+            String query = "SELECT * FROM record WHERE month = '" + month + "' and uid = "+userid+";";
             ResultSet resultSet = display(query);
             while (resultSet.next()) {
                 System.out.println("Expense ID: " + resultSet.getInt("id"));
@@ -80,9 +94,7 @@ public class DatabaseManager {
             double totalExpenses = 0.0;
         
             String sql = "SELECT amount FROM record WHERE MONTH = '" + month + "'";
-            
             runsql(sql);
-        
             ResultSet resultSet = display(sql);
         
             while (resultSet.next()) {
