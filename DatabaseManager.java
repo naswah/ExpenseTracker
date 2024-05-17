@@ -83,8 +83,9 @@ public class DatabaseManager {
     // }
 
 
-        public void printExpensesByMonth(String month) throws Exception {
-            String query = "SELECT * FROM record WHERE month = '" + month + "';";
+       public void printExpensesByMonth(String month, int uid) throws Exception {
+           
+            String query = "SELECT * FROM record NATURAL JOIN combine NATURAL JOIN users WHERE month = '" + month + "' AND uid = uid;";
             ResultSet resultSet = display(query);
             while (resultSet.next()) {
                 System.out.println("Expense ID: " + resultSet.getInt("id"));
@@ -94,7 +95,6 @@ public class DatabaseManager {
                 System.out.println("---------------------");
             }
         }    
-   
         public double calculateSavings(int uid, String month) throws Exception {
             double totalExpenses = 0.0;
             double income = 0.0;
