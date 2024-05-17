@@ -37,8 +37,8 @@ public class DatabaseManager {
 
     public void addExpense(int uid) throws Exception{
         Scanner scan = new Scanner(System.in);
-        //Expense expense= new Expense();
         String addAnother ;
+
             do{
 
                 System.out.println("Enter category of expense:");
@@ -53,11 +53,16 @@ public class DatabaseManager {
 
                 Expense expense = new Expense(category, amount, month);
 
-                String sqlString = "insert into record (category, amount, month) values('"+ expense.category +"',  "+expense.amount+" , '"+ expense.month+"');";
+                String sqlString = "insert into record (category, amount, month) values('"+ category +"',  "+amount+" , '"+ month+"');";
                 runsql(sqlString);
+                
+                //resultSet.next();
 
-                //String sql= "insert into combine values("+ id +",  "+uid+" );";
-               // runsql(sql);
+                String sql1 = "select count(*) from record as total;";
+                runsql(sql1);
+
+                String sql2 = "insert into combine values(total, uid)";
+                runsql(sql2);
 
                 System.out.println("Expense added successfully.");
 
@@ -78,8 +83,8 @@ public class DatabaseManager {
     // }
 
 
-        public void printExpensesByMonth(String month, int userid) throws Exception {
-            String query = "SELECT * FROM record WHERE month = '" + month + "' and uid = "+userid+";";
+        public void printExpensesByMonth(String month) throws Exception {
+            String query = "SELECT * FROM record WHERE month = '" + month + "';";
             ResultSet resultSet = display(query);
             while (resultSet.next()) {
                 System.out.println("Expense ID: " + resultSet.getInt("id"));
