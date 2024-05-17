@@ -100,7 +100,7 @@ public class Main {
                 case 4:
                     System.out.println("Enter a month: ");
                     String months = scan.nextLine();
-                   // edb.calculateSavings(months, totalIncome);
+                    edb.calculateSavings(uid, months);
                     ch = (char) System.in.read();
                     break;
 
