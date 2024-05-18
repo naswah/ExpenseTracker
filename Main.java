@@ -1,23 +1,11 @@
 package javaproject;
 
+import java.sql.ResultSet;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
-        int c, uid;
-        char ch;
-        String newuser;
-
-        DatabaseManager edb = new DatabaseManager();
-
-        Scanner scan = new Scanner(System.in);
-
-        System.out.println("EXPENSE TRACKER");
-        System.out.println("Hello! Are u a new user? (yes/no): ");
-        newuser = scan.nextLine();
-
-        if (newuser.equals("yes")){
-            System.out.println("To calculate your savings, we need your information. Please fill up the details.");
+    static void createNewUser(){
+        System.out.println("To calculate your savings, we need your information. Please fill up the details.");
             System.out.println("Please enter your userid :");
             uid = scan.nextInt();
             scan.nextLine();
@@ -47,13 +35,47 @@ public class Main {
                 edb.runsql(sqlString);
             }
             
+    }
+    public static void main(String[] args) throws Exception {
+        int c, uid;
+        char ch;
+        String newuser;
+
+        DatabaseManager edb = new DatabaseManager();
+
+        Scanner scan = new Scanner(System.in);
+
+        System.out.println("EXPENSE TRACKER");
+        System.out.println("Hello! Are u a new user? (yes/no): ");
+        newuser = scan.nextLine();
+
+        if (newuser.equals("yes")){
+            
         }
 
         else {
+            //existing user
             System.out.println("Enter your userid :");
             uid = scan.nextInt();
-            String sqlString = "select * from users;";
-            edb.runsql(sqlString);
+            scan.nextLine();
+
+            //validity
+            String sql ="select * from record where uid = "+ uid +";"; 
+            ResultSet resultSet=edb.display(sql);
+            if(!resultSet.next()){
+                System.out.println("User doesn;t exist");
+
+            }
+
+
+                //String sql1 = "select count(*) as total from record;";
+                //ResultSet resultSet=display(sql1);
+                resultSet.next();
+                int id = resultSet.getInt("id");
+
+                if()
+
+            
 
         }
         
