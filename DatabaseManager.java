@@ -55,13 +55,13 @@ public class DatabaseManager {
 
                 String sqlString = "insert into record (category, amount, month) values('"+ category +"',  "+amount+" , '"+ month+"');";
                 runsql(sqlString);
-                
-                //resultSet.next();
 
-                String sql1 = "select count(*) from record as total;";
-                runsql(sql1);
+                String sql1 = "select count(*) as total from record;";
+                ResultSet resultSet=display(sql1);
+                resultSet.next();
+                int total = resultSet.getInt("total");
 
-                String sql2 = "insert into combine values(total, uid)";
+                String sql2 = "insert into combine values("+total+", "+uid+";)";
                 runsql(sql2);
 
                 System.out.println("Expense added successfully.");
@@ -83,9 +83,9 @@ public class DatabaseManager {
     // }
 
 
-       public void printExpensesByMonth(String month, int uid) throws Exception {
+        public void printExpensesByMonth(String month, int uid) throws Exception {
            
-            String query = "SELECT * FROM record NATURAL JOIN combine NATURAL JOIN users WHERE month = '" + month + "' AND uid = uid;";
+            String query = "SELECT * FROM record NATURAL JOIN combine NATURAL JOIN users WHERE month = '" + month + "' AND uid = "+ uid +";";
             ResultSet resultSet = display(query);
             while (resultSet.next()) {
                 System.out.println("Expense ID: " + resultSet.getInt("id"));
@@ -95,6 +95,7 @@ public class DatabaseManager {
                 System.out.println("---------------------");
             }
         }    
+   
         public double calculateSavings(int uid, String month) throws Exception {
             double totalExpenses = 0.0;
             double income = 0.0;
